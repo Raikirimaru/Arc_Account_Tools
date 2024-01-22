@@ -1,6 +1,6 @@
 {
   "name": "server",
-  "homepage": "accountill.com",
+  "homepage": "arcaccount.com",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -9,7 +9,7 @@
     "start": "node index.js"
   },
   "keywords": [],
-  "author": "Panshak Solomon",
+  "author": "Raikirimaru",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
