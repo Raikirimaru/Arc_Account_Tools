@@ -20,7 +20,6 @@ Raikirimaru
       - [Database](#database)
   * [Configuration and Setup](#configuration-and-setup)
   * [Troubleshooting](#troubleshooting)
-  * [Author](#author)
   * [License](#license)
 
 ## Introduction
