@@ -72,7 +72,7 @@ const Modal = ({ setOpen, open, invoice }) => {
     })
 
     //Material ui datepicker
-  const [selectedDate, setSelectedDate] = React.useState(new Date());
+    const [selectedDate, setSelectedDate] = React.useState(new Date());
   //Crate a state to handle the payment records
     const [paymentRecords, setPaymentRecords] = useState([])
     const [method, setMethod] = useState({})
@@ -112,9 +112,9 @@ const Modal = ({ setOpen, open, invoice }) => {
 
 
     useEffect(() => {
-      setUpdatedInvoice({...invoice, status: (Number(totalAmountReceived.toFixed(2)) + Number(payment.amountPaid)) >= invoice?.total ? 'Paid' : 'Partial', 
+      setUpdatedInvoice({...invoice, status: (Number(totalAmountReceived) + Number(payment.amountPaid)) >= invoice?.total ? 'Paid' : 'Partial', 
         paymentRecords: [...paymentRecords, payment], 
-        totalAmountReceived:  Number(totalAmountReceived.toFixed(2)) + Number(payment.amountPaid)
+        totalAmountReceived:  Number(totalAmountReceived) + Number(payment.amountPaid)
       })
     },[payment, paymentRecords, totalAmountReceived, invoice] )
 

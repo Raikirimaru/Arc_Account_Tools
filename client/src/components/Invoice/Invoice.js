@@ -143,9 +143,9 @@ const Invoice = () => {
         setSelectedDate(date);
     };
 
-    const handleRates =(e) => {
+    const handleRates = ( e ) => {
         setRates(e.target.value)
-        setInvoiceData((prevState) => ({...prevState, vat: e.target.value}))
+        setInvoiceData(( prevState ) => ({...prevState, vat: e.target.value}))
     }
 
     // console.log(invoiceData)
