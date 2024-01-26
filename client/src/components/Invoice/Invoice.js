@@ -143,10 +143,13 @@ const Invoice = () => {
         setSelectedDate(date);
     };
 
-    const handleRates = ( e ) => {
-        setRates(e.target.value)
-        setInvoiceData(( prevState ) => ({...prevState, vat: prevState.vat}))
+    const handleRates = (e) => {
+        console.log('Before Update - vat:', vat, 'tax:', invoiceData.tax);
+        setRates(e.target.value);
+        setInvoiceData((prevState) => ({ ...prevState, tax: e.target.value }));
+        console.log('After Update - vat:', vat, 'tax:', invoiceData.tax);
     }
+    
 
     // console.log(invoiceData)
     // Change handler for dynamically added input field
