@@ -145,7 +145,7 @@ const Invoice = () => {
 
     const handleRates = ( e ) => {
         setRates(e.target.value)
-        setInvoiceData(( prevState ) => ({...prevState, vat: e.target.value}))
+        setInvoiceData(( prevState ) => ({...prevState, vat: prevState.vat}))
     }
 
     // console.log(invoiceData)
