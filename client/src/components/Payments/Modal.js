@@ -112,9 +112,9 @@ const Modal = ({ setOpen, open, invoice }) => {
 
 
     useEffect(() => {
-      setUpdatedInvoice({...invoice, status: (Number(totalAmountReceived.toFixed(2)) + Number(payment.amountPaid.toFixed(2))) >= invoice?.total ? 'Paid' : 'Partial', 
+      setUpdatedInvoice({...invoice, status: (Number(totalAmountReceived.toFixed(2)) + Number(payment.amountPaid)) >= invoice?.total ? 'Paid' : 'Partial', 
         paymentRecords: [...paymentRecords, payment], 
-        totalAmountReceived:  Number(totalAmountReceived.toFixed(2)) + Number(payment.amountPaid.toFixed(2))
+        totalAmountReceived:  Number(totalAmountReceived.toFixed(2)) + Number(payment.amountPaid)
       })
     },[payment, paymentRecords, totalAmountReceived, invoice] )
 
