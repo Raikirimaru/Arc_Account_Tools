@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import styles from './Footer.module.css'
 import FabButton from '../Fab/Fab'
+import styles from './Footer.module.css'
 
 const Footer = () => {
     const location = useLocation()
@@ -14,7 +14,7 @@ const Footer = () => {
     return (
         <footer>
             <div className={styles.footerText}>
-            ©Panshak Solomon  | Made with ♥ in 🇳🇬 <span><a href="https://github.com/Panshak/accountill" target="_blank" rel="noopener noreferrer">[Download source code]</a></span>
+            ©AMEVOR Mawuli Godwin A.  | Made with ♥ in 🇳🇬 <span><a href="https://github.com/Raikirimaru/Arc_Account_Tools" target="_blank" rel="noopener noreferrer">[Download source code]</a></span>
             </div>
             {user && (
             <FabButton />

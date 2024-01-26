@@ -1,4 +1,4 @@
-import moment from 'moment'
+import moment from 'moment';
 
 export default function (
     { 
@@ -8,7 +8,6 @@ export default function (
       company,
       link,
       id,
-      
    }) {
     // const today = new Date();
 return `
@@ -16,7 +15,7 @@ return `
 <html>
     <head>
        <style>
-           html, body {
+html, body {
     margin: 0 auto;
     padding: 0;
 }
@@ -117,9 +116,6 @@ hr {
 }
        </style>
     </head>
-    
-    
-    
     <body>
         <div class="layout">
         <div class="content">
@@ -128,12 +124,12 @@ hr {
             
               <hr>
               <div>
-                  <p style="font-size: 18px">${Number(balanceDue) <= 0 ? 'Thank you for your business' : type} ${Number(balanceDue) != 0 ? 'for' : ''} <span style="font-weight: 700">${Number(balanceDue) <= 0 ? '' : balanceDue}</span> ${Number(balanceDue) <= 0 ? '' : `due by`} <span style="font-weight: 700">${Number(balanceDue) <= 0 ? '' : moment(dueDate).format("MMM Do YYYY")}</span></p>
+                  <p style="font-size: 18px">${Number(balanceDue).toFixed(2) <= 0 ? 'Thank you for your business' : type} ${Number(balanceDue).toFixed(2) != 0 ? 'for' : ''} <span style="font-weight: 700">${Number(balanceDue) <= 0 ? '' : balanceDue}</span> ${Number(balanceDue) <= 0 ? '' : `due by`} <span style="font-weight: 700">${Number(balanceDue) <= 0 ? '' : moment(dueDate).format("MMM Do YYYY")}</span></p>
               </div>
               
               <div class="link-container">
                   <a href=${link} class="invoice-link" style="color: white">
-                  ${Number(balanceDue) <= 0 ? 'View Receipt' : `View ${type}`}
+                  ${Number(balanceDue).toFixed(2) <= 0 ? 'View Receipt' : `View ${type}`}
                   </a>
               </div>
               
@@ -148,11 +144,11 @@ hr {
         </div>
         
       <div class"footer">
-          <a href="https://accountill.com">
+          <a href="https://arcaccount.com">
           <img class="footer-logo" src="https://i.postimg.cc/hGZKzdkS/logo.png" alt="arc-invoice"/>
         </a>
       </div>
-    <p style="text-align: center">Make beautiful invoice for free at accountill.com</p>
+    <p style="text-align: center">Make beautiful invoice for free at arcaccount.com</p>
     </div>
     </body>
 </html>`

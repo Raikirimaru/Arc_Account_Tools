@@ -1,6 +1,8 @@
+/* eslint-disable no-unused-vars */
 
 //store
 //array of booorowers
+
 
 
 const store = [
@@ -11,6 +13,7 @@ const store = [
     {name: 'binocular', quantity: 500, type: 'binocular'},
    
 ]
+
 
 
 const status =['pending', 'delivered', 'returned']

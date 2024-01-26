@@ -1,4 +1,3 @@
-import moment from 'moment'
 
 export default function (
    { name,
@@ -113,7 +112,7 @@ img {
 <body>
 <section  class="header">
         <div>
-           <img src="https://i.postimg.cc/8PyXvBpC/Salesforce-com-logo-svg.png" />
+            <img src="https://i.postimg.cc/8PyXvBpC/Salesforce-com-logo-svg.png" />
         </div>
 </section>
 <section class="address">
@@ -186,7 +185,7 @@ img {
 
         <tr>
             <td>Balance</td>
-            <td ><h3 style="line-height: 5px; text-align: center">US$0.00</h3></td>
+            <td><h3 style="line-height: 5px; text-align: center">US$0.00</h3></td>
           </tr>
         
       </table>

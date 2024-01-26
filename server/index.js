@@ -1,24 +1,22 @@
-
-//Copyright (c) 2022 Panshak Solomon
-
-import express from 'express'
 import cors from 'cors'
-import mongoose from 'mongoose'
 import dotenv from 'dotenv'
+import express from 'express'
+import { google } from 'googleapis'
+import mongoose from 'mongoose'
 import nodemailer from 'nodemailer'
-import pdf from 'html-pdf'
-import { fileURLToPath } from 'url'
 import { dirname } from 'path'
+import puppeteer from 'puppeteer'
+import { fileURLToPath } from 'url'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
-import invoiceRoutes from './routes/invoices.js'
 import clientRoutes from './routes/clients.js'
+import invoiceRoutes from './routes/invoices.js'
 import userRoutes from './routes/userRoutes.js'
 
-import profile from './routes/profile.js'
 import pdfTemplate from './documents/index.js'
+import profile from './routes/profile.js'
 // import invoiceTemplate from './documents/invoice.js'
 import emailTemplate from './documents/email.js'
 
@@ -34,74 +32,139 @@ app.use('/clients', clientRoutes)
 app.use('/users', userRoutes)
 app.use('/profiles', profile)
 
+/*POPULATE BELOW FIELDS WITH YOUR CREDETIALS*/
+
+const ID = process.env.CLIENT_ID
+const SECRET = process.env.CLIENT_SECRET
+const TOKEN = process.env.REFRESH_TOKEN
+const RESTRICTED = process.env.REDIRECT_URI
+const MAIL = process.env.SMTP_USER
+const AUTH = process.env.AUTH_TYPE
+const PASS = process.env.SMTP_PASS
+const SERVICE_MAIL = process.env.MAILER_SERVICE
+const SECURE = process.env.SMTP_SECURE
+
+/*POPULATE ABOVE FIELDS WITH YOUR CREDETIALS*/
+
+const oAuth2Client = new google.auth.OAuth2(
+    ID,
+    SECRET,
+    RESTRICTED
+);
+
+oAuth2Client.setCredentials({ refresh_token: TOKEN })
+const ACCESS_TOKEN = await oAuth2Client.getAccessToken()
+
 // NODEMAILER TRANSPORT FOR SENDING INVOICE VIA EMAIL
 const transporter = nodemailer.createTransport({
+    sendMail: true,
+    service: SERVICE_MAIL,
+    secure: SECURE,
     host: process.env.SMTP_HOST,
-    port : process.env.SMTP_PORT,
+    port: process.env.SMTP_PORT,
     auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS
+        type: AUTH,
+        clientId: ID,
+        clientSecret: SECRET,
     },
-    tls:{
-        rejectUnauthorized:false
-    }
+    tls: {
+        rejectUnauthorized: true
+    },
+    debug: true
 })
 
+// SEND PDF INVOICE VIA EMAIL
+app.post('/send-pdf', async (req, res) => {
+    const { email, company } = req.body;
 
-var options = { format: 'A4' };
-//SEND PDF INVOICE VIA EMAIL
-app.post('/send-pdf', (req, res) => {
-    const { email, company } = req.body
+    try {
+        // Launch Puppeteer browser
+        const browser = await puppeteer.launch({
+            ignoreDefaultArgs: ['--disable-extensions'],
+        });
+        const page = await browser.newPage();
 
-    // pdf.create(pdfTemplate(req.body), {}).toFile('invoice.pdf', (err) => {
-    pdf.create(pdfTemplate(req.body), options).toFile('invoice.pdf', (err) => {
-       
-          // send mail with defined transport object
+        // Use req.body to generate the HTML content dynamically
+        const content = pdfTemplate(req.body);
+
+        // Set the HTML content of the page
+        await page.setContent(content);
+
+        // Generate the PDF
+        await page.pdf({
+            path: 'invoice.pdf',
+            format: 'A4',
+            printBackground: true,
+        });
+
+        // Close the Puppeteer browser
+        await browser.close();
+        // Send email with defined transport object
         transporter.sendMail({
-            from: ` Accountill <hello@accountill.com>`, // sender address
-            to: `${email}`, // list of receivers
+            from: `${company.email}`,
+            to: `${email}`,
             replyTo: `${company.email}`,
-            subject: `Invoice from ${company.businessName ? company.businessName : company.name}`, // Subject line
-            text: `Invoice from ${company.businessName ? company.businessName : company.name }`, // plain text body
-            html: emailTemplate(req.body), // html body
+            subject: `Invoice from ${company.businessName ? company.businessName : company.name}`,
+            text: `Invoice from ${company.businessName ? company.businessName : company.name}`,
+            html: emailTemplate(req.body),
+            auth: {
+                user: MAIL,
+                pass: PASS,
+                refreshToken: TOKEN,
+                accessToken: ACCESS_TOKEN,
+            },
             attachments: [{
                 filename: 'invoice.pdf',
                 path: `${__dirname}/invoice.pdf`
             }]
         });
 
-        if(err) {
-            res.send(Promise.reject());
-        }
-        res.send(Promise.resolve());
-    });
+        console.log('PDF sent via email successfully');
+        res.send('PDF sent via email successfully');
+    } catch (error) {
+        // If there's an error during PDF generation, email sending, or Puppeteer operations
+        console.error('Error sending PDF via email:', error.message);
+        res.status(500).send('Error sending PDF via email');
+    }
 });
 
-
 //Problems downloading and sending invoice
-// npm install html-pdf -g
-// npm link html-pdf
-// npm link phantomjs-prebuilt
+// npm install puppeteer
 
 //CREATE AND SEND PDF INVOICE
-app.post('/create-pdf', (req, res) => {
-    pdf.create(pdfTemplate(req.body), {}).toFile('invoice.pdf', (err) => {
-        if(err) {
-            res.send(Promise.reject());
-        }
-        res.send(Promise.resolve());
-    });
+app.post('/create-pdf', async (req, res) => {
+    try {
+        const browser = await puppeteer.launch();
+
+        const page = await browser.newPage();
+
+        const content = pdfTemplate(req.body);
+
+        await page.setContent(content);
+
+        await page.pdf({
+            path: 'invoice.pdf',
+            format: 'A4',
+            printBackground: true,
+        });
+
+        await browser.close();
+        res.send('PDF created successfully');
+    } catch (error) {
+        console.error('Error generating PDF:', error.message);
+        res.status(500).send('Error generating PDF');
+    }
 });
 
 //SEND PDF INVOICE
 app.get('/fetch-pdf', (req, res) => {
-     res.sendFile(`${__dirname}/invoice.pdf`)
+    res.sendFile(`${__dirname}/invoice.pdf`)
 })
 
 
 app.get('/', (req, res) => {
     res.send('SERVER IS RUNNING')
-  })
+})
 
 const DB_URL = process.env.DB_URL
 const PORT = process.env.PORT || 5000
@@ -112,4 +175,3 @@ mongoose.connect(DB_URL, { useNewUrlParser: true, useUnifiedTopology: true})
 
 mongoose.set('useFindAndModify', false)
 mongoose.set('useCreateIndex', true)
-

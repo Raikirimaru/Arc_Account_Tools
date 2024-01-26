@@ -1,41 +1,40 @@
-import React, { useState, useEffect} from 'react'
-import styles from './Invoice.module.css'
-import { useDispatch, useSelector } from 'react-redux'
-import { useParams } from 'react-router-dom'
 import moment from 'moment'
-import { useHistory } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useHistory, useParams } from 'react-router-dom'
 import { toCommas } from '../../utils/utils'
+import styles from './Invoice.module.css'
 
-import IconButton from '@material-ui/core/IconButton';
-import DeleteOutlineRoundedIcon from '@material-ui/icons/DeleteOutlineRounded';
-import DateFnsUtils from '@date-io/date-fns';
-import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
-import TextField from '@material-ui/core/TextField';
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import { makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import InputBase from '@material-ui/core/InputBase';
-import { Container, Grid } from '@material-ui/core';
-import Avatar from '@material-ui/core/Avatar';
-import Divider from '@material-ui/core/Divider';
-import SaveIcon from '@material-ui/icons/Save';
-import Button from '@material-ui/core/Button';
-import Chip from '@material-ui/core/Chip';
-import {initialState} from '../../initialState'
-import currencies from '../../currencies.json'
-import { createInvoice, getInvoice, updateInvoice } from '../../actions/invoiceActions';
-import { getClientsByUser } from '../../actions/clientActions'
-import AddClient from './AddClient';
-import InvoiceType from './InvoiceType';
+import DateFnsUtils from '@date-io/date-fns'
+import { Container, Grid } from '@material-ui/core'
+import Avatar from '@material-ui/core/Avatar'
+import Button from '@material-ui/core/Button'
+import Chip from '@material-ui/core/Chip'
+import Divider from '@material-ui/core/Divider'
+import IconButton from '@material-ui/core/IconButton'
+import InputBase from '@material-ui/core/InputBase'
+import Paper from '@material-ui/core/Paper'
+import Table from '@material-ui/core/Table'
+import TableBody from '@material-ui/core/TableBody'
+import TableCell from '@material-ui/core/TableCell'
+import TableContainer from '@material-ui/core/TableContainer'
+import TableHead from '@material-ui/core/TableHead'
+import TableRow from '@material-ui/core/TableRow'
+import TextField from '@material-ui/core/TextField'
+import Typography from '@material-ui/core/Typography'
+import { makeStyles } from '@material-ui/core/styles'
+import DeleteOutlineRoundedIcon from '@material-ui/icons/DeleteOutlineRounded'
+import SaveIcon from '@material-ui/icons/Save'
+import Autocomplete from '@material-ui/lab/Autocomplete'
+import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'
 import axios from 'axios'
 import { useLocation } from 'react-router-dom'
+import { getClientsByUser } from '../../actions/clientActions'
+import { createInvoice, getInvoice, updateInvoice } from '../../actions/invoiceActions'
+import currencies from '../../currencies.json'
+import { initialState } from '../../initialState'
+import AddClient from './AddClient'
+import InvoiceType from './InvoiceType'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -58,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
         paddingLeft: theme.spacing(5),
         paddingRight: theme.spacing(1),
     }
-  }));
+}));
 
 const Invoice = () => {
 
@@ -90,22 +89,19 @@ const Invoice = () => {
 
     const getTotalCount = async() => {
         try {
-          const response = await axios.get(`${process.env.REACT_APP_API}/invoices/count?searchQuery=${user?.result?._id}`);
+            const response = await axios.get(`${process.env.REACT_APP_API}/invoices/count?searchQuery=${user?.result?._id}`);
         //   console.log(response.data);
         //Get total count of invoice from the server and increment by one to serialized numbering of invoice
         setInvoiceData({...invoiceData, invoiceNumber: (Number(response.data) + 1).toString().padStart(3, '0')})
         } catch (error) {
-          console.error(error);
+            console.error(error);
         }
-      }
-      
-
-
+    }
 
     useEffect(() => {
         dispatch(getInvoice(id));
         // eslint-disable-next-line
-      }, [id]);
+    }, [id]);
 
     useEffect(() => {
         dispatch(getClientsByUser({search: user?.result._id || user?.result?.googleId}));
@@ -125,7 +121,6 @@ const Invoice = () => {
         }
     }, [invoice])
 
- 
     useEffect(() => {
         if(type === 'Receipt') {
             setStatus('Paid')
@@ -137,22 +132,21 @@ const Invoice = () => {
     const defaultProps = {
         options: currencies,
         getOptionLabel: (option) => option.label
-      };
+    };
 
     const clientsProps = {
         options: clients,
         getOptionLabel: (option) => option.name
-      };
-      
+    };
     
     const handleDateChange = (date) => {
-      setSelectedDate(date);
+        setSelectedDate(date);
     };
 
-  const handleRates =(e) => {
-    setRates(e.target.value)
-    setInvoiceData((prevState) => ({...prevState, tax: e.target.value}))
-  }
+    const handleRates =(e) => {
+        setRates(e.target.value)
+        setInvoiceData((prevState) => ({...prevState, tax: e.target.value}))
+    }
 
     // console.log(invoiceData)
     // Change handler for dynamically added input field
@@ -160,7 +154,6 @@ const Invoice = () => {
         const values = [...invoiceData.items]
         values[index][e.target.name] = e.target.value
         setInvoiceData({...invoiceData, items: values})
-        
     }
 
     useEffect(() => {
@@ -178,7 +171,7 @@ const Invoice = () => {
         }
 
         subTotal()
-       
+
     }, [invoiceData])
 
 
@@ -215,19 +208,19 @@ const Invoice = () => {
     const handleSubmit =  async (e ) => {
         e.preventDefault()
         if(invoice) {
-         dispatch(updateInvoice( invoice._id, {
-             ...invoiceData, 
-             subTotal: subTotal, 
-             total: total, 
-             vat: vat, 
-             rates: rates, 
-             currency: currency, 
-             dueDate: selectedDate, 
-             client, 
-             type: type, 
-             status: status 
+            dispatch(updateInvoice( invoice._id, {
+                ...invoiceData, 
+                subTotal: subTotal, 
+                total: total, 
+                vat: vat, 
+                rates: rates, 
+                currency: currency, 
+                dueDate: selectedDate, 
+                client, 
+                type: type, 
+                status: status 
             })) 
-         history.push(`/invoice/${invoice._id}`)
+            history.push(`/invoice/${invoice._id}`)
         } else {
 
         dispatch(createInvoice({
@@ -310,7 +303,6 @@ const Invoice = () => {
                     <Grid item style={{width: '50%'}}>
                         <Container>
                             <Typography variant="overline" style={{color: 'gray', paddingRight: '3px'}} gutterBottom>Bill to</Typography>
-                            
 
                             {client  && (
                                 <>
@@ -333,7 +325,6 @@ const Invoice = () => {
                                                 />}
                                             value={clients?.name}
                                             onChange={(event, value) => setClient(value)}
-                                            
                                     />
 
                             </div>
@@ -435,7 +426,6 @@ const Invoice = () => {
                             onChange={handleRates} 
                             placeholder="e.g 10" 
                             label="Tax Rates(%)"
-                            
                         />
                     </Grid>
                     <Grid item style={{marginRight: 10}} >
@@ -464,9 +454,7 @@ const Invoice = () => {
                                     margin="normal" 
                                     />}
                                 value={currency.value}
-                                onChange={(event, value) => setCurrency(value.value)}
-                                
-                            
+                                onChange={(event, value) => setCurrency(value.value)} 
                         />
                     </Grid>
                 </Grid>

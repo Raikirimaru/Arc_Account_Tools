@@ -1,33 +1,32 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 // import "../../../node_modules/react-progress-button/react-progress-button.css"
-import { useSnackbar } from 'react-simple-snackbar'
-import { useLocation, useParams } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
-import { initialState } from '../../initialState'
-import { getInvoice } from '../../actions/invoiceActions'
-import { toCommas } from '../../utils/utils'
-import styles from './InvoiceDetails.module.css'
+import { Container, Grid } from '@material-ui/core'
+import Divider from '@material-ui/core/Divider'
+import InputBase from '@material-ui/core/InputBase'
+import Paper from '@material-ui/core/Paper'
+import Table from '@material-ui/core/Table'
+import TableBody from '@material-ui/core/TableBody'
+import TableCell from '@material-ui/core/TableCell'
+import TableContainer from '@material-ui/core/TableContainer'
+import TableHead from '@material-ui/core/TableHead'
+import TableRow from '@material-ui/core/TableRow'
+import Typography from '@material-ui/core/Typography'
+import { makeStyles } from '@material-ui/core/styles'
+import BorderColorIcon from '@material-ui/icons/BorderColor'
+import MonetizationOnIcon from '@material-ui/icons/MonetizationOn'
 import moment from 'moment'
-import { useHistory } from 'react-router-dom'
-import { makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import InputBase from '@material-ui/core/InputBase';
-import { Container, Grid } from '@material-ui/core';
-import Divider from '@material-ui/core/Divider';
-import BorderColorIcon from '@material-ui/icons/BorderColor';
-import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
+import { useDispatch, useSelector } from 'react-redux'
+import { useHistory, useLocation, useParams } from 'react-router-dom'
+import { useSnackbar } from 'react-simple-snackbar'
+import { getInvoice } from '../../actions/invoiceActions'
+import { initialState } from '../../initialState'
+import { toCommas } from '../../utils/utils'
 import Spinner from '../Spinner/Spinner'
+import styles from './InvoiceDetails.module.css'
 
+import axios from 'axios'
+import { saveAs } from 'file-saver'
 import ProgressButton from 'react-progress-button'
-import axios from 'axios';
-import { saveAs } from 'file-saver';
 import Modal from '../Payments/Modal'
 import PaymentHistory from './PaymentHistory'
 
@@ -140,7 +139,6 @@ const InvoiceDetails = () => {
       .then(() => axios.get(`${process.env.REACT_APP_API}/fetch-pdf`, { responseType: 'blob' }))
       .then((res) => {
         const pdfBlob = new Blob([res.data], { type: 'application/pdf' });
-
         saveAs(pdfBlob, 'invoice.pdf')
       }).then(() =>  setDownloadStatus('success'))
   }

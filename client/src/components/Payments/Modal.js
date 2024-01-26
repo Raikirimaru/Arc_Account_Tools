@@ -1,19 +1,19 @@
  /* eslint-disable */
-import React, { useState, useEffect} from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import { Grid, TextField } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
-import MuiDialogTitle from '@material-ui/core/DialogTitle';
-import MuiDialogContent from '@material-ui/core/DialogContent';
 import MuiDialogActions from '@material-ui/core/DialogActions';
+import MuiDialogContent from '@material-ui/core/DialogContent';
+import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import IconButton from '@material-ui/core/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
-import { TextField, Grid } from '@material-ui/core';
-import DatePicker from './DatePicker'
+import { withStyles } from '@material-ui/core/styles';
+import CloseIcon from '@material-ui/icons/Close';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import React, { useEffect, useState } from 'react';
+import DatePicker from './DatePicker';
 
-import { useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux';
 import { updateInvoice } from '../../actions/invoiceActions';
 
 const styles = (theme) => ({
@@ -90,14 +90,13 @@ const Modal = ({ setOpen, open, invoice }) => {
 
     useEffect(() => {
       if(invoice) {
-        setPayment({...payment, amountPaid: Number(invoice.total) - Number(invoice.totalAmountReceived), paidBy: invoice?.client?.name})
+        setPayment({...payment, amountPaid: Number(invoice.total).toFixed(2) - Number(invoice.totalAmountReceived).toFixed(2), paidBy: invoice?.client?.name})
       }
     },[invoice])
     
     useEffect(() => {
         if(invoice?.paymentRecords) {
             setPaymentRecords(invoice?.paymentRecords)
-           
         }
     }, [invoice])
 
@@ -106,18 +105,16 @@ const Modal = ({ setOpen, open, invoice }) => {
       let totalReceived = 0
       for(var i = 0; i < invoice?.paymentRecords?.length; i++) {
         totalReceived += Number(invoice?.paymentRecords[i]?.amountPaid)
-        setTotalAmountReceived(totalReceived)
+        setTotalAmountReceived(totalReceived.toFixed(2))
     }
     }, [invoice, payment] )
 
 
 
     useEffect(() => {
-      setUpdatedInvoice({...invoice, status: (Number(totalAmountReceived) + Number(payment.amountPaid)) 
-        >= 
-        invoice?.total ? 'Paid' : 'Partial', 
+      setUpdatedInvoice({...invoice, status: (Number(totalAmountReceived.toFixed(2)) + Number(payment.amountPaid.toFixed(2))) >= invoice?.total ? 'Paid' : 'Partial', 
         paymentRecords: [...paymentRecords, payment], 
-        totalAmountReceived:  Number(totalAmountReceived) + Number(payment.amountPaid)
+        totalAmountReceived:  Number(totalAmountReceived.toFixed(2)) + Number(payment.amountPaid.toFixed(2))
       })
     },[payment, paymentRecords, totalAmountReceived, invoice] )
 
@@ -153,7 +150,7 @@ const Modal = ({ setOpen, open, invoice }) => {
         <form >
       <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open} fullWidth >
             <DialogTitle id="customized-dialog-title" onClose={handleClose} style={{paddingLeft: '20px', color: 'white'}}>
-           Record Payment
+            Record Payment
             </DialogTitle>
             <DialogContent dividers>
 
@@ -167,7 +164,7 @@ const Modal = ({ setOpen, open, invoice }) => {
                 style={{padding: 10}} 
                 variant="outlined" 
                 onChange={(e) => setPayment({...payment, amountPaid: e.target.value})}
-                value={payment.amountPaid}
+                value={payment.amountPaid.toFixed(2)}
             />
 
             <Grid item fullWidth>

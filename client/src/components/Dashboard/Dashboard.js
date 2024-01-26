@@ -1,15 +1,15 @@
 import React, { useEffect } from 'react'
-import { toCommas } from '../../utils/utils'
-import styles from './Dashboard.module.css'
+import { useDispatch, useSelector } from 'react-redux'
 import { useHistory, useLocation } from 'react-router-dom'
-import { useSelector, useDispatch } from 'react-redux'
 import { getInvoicesByUser } from '../../actions/invoiceActions'
+import { toCommas } from '../../utils/utils'
 import Empty from '../svgIcons/Empty'
 import Chart from './Chart'
+import styles from './Dashboard.module.css'
 // import Donut from './Donut'
 import moment from 'moment'
-import { Check, Pie, Bag, Card, Clock, Frown } from './Icons'
 import Spinner from '../Spinner/Spinner'
+import { Bag, Card, Check, Clock, Frown, Pie } from './Icons'
 
 
 const Dashboard = () => {
@@ -172,8 +172,6 @@ const Dashboard = () => {
                                 <Clock />
                             </div>
                         </li>
-                        
-                 
                 </ul>
 
             </section>

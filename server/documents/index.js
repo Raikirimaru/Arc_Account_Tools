@@ -1,4 +1,4 @@
-import moment from 'moment'
+import moment from 'moment';
 
 export default function (
    { name,
@@ -25,7 +25,6 @@ return `
 <html>
 <head>
 <style>
-
 .invoice-container {
     margin: 0;
     padding: 0;
@@ -103,7 +102,6 @@ table th {
 
 img {
     width: 100px;
-   
 }
 
 </style>
@@ -120,7 +118,7 @@ img {
 </section>
 <section class="address">
 
-      <div>
+      <div style="margin-right: 450px;">
           <p class="title">From:</p>
           <h4 style="font-size: 9px; line-height: 5px">${company.businessName ? company.businessName : company.name}</h4>
           <p style="font-size: 9px; line-height: 5px">${company.email}</p>
@@ -128,7 +126,7 @@ img {
           <p style="font-size: 9px; line-height: 5px">${company.contactAddress}</p>
       </div>
 
-      <div style="margin-bottom: 100px; margin-top: 20px">
+      <div style="margin-bottom: 100px; margin-top: 20px; margin-right: 500px;">
       <p class="title">Bill to:</p>
         <h4 style="font-size: 9px; line-height: 5px">${name}</h4>
         <p style="font-size: 9px; line-height: 5px">${email}</p>
@@ -136,8 +134,8 @@ img {
         <p style="font-size: 9px; line-height: 5px">${address}</p>
       </div>
 
-    <div class="status" style="margin-top: -280px">
-        <h1 style="font-size: 12px">${Number(balanceDue) <= 0 ? 'Receipt' : type}</h1>
+    <div class="status" style="margin-top: -280px; margin-left: 200px">
+        <h1 style="font-size: 12px">${Number(balanceDue).toFixed(2) <= 0 ? 'Receipt' : type}</h1>
         <p style="font-size: 8px; margin-bottom: 10px">${id}</p>
         <p class="title" style="font-size: 8px">Status</p>
         <h3 style="font-size: 12px">${status}</h3>

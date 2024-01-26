@@ -10,7 +10,7 @@ export const initialState = {
     rates: '',
     vat: 0,
     currency: '',
-    invoiceNumber: Math.floor(Math.random() * 100000),
+    invoiceNumber: Math.floor(Math.random() * 1000),
     status: '',
     type: 'Invoice',
     creator: '',

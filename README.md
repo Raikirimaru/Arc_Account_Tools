@@ -5,7 +5,7 @@ Built with the MERN stack (MongoDB, Express, React and NodeJS).
 
 
 ## Update
-I am pleased to inform you that the name of this repository has been changed from Arc Invoice to Accountill.
+I am pleased to inform you that the name of this repository has been changed from Arc Invoice to Arcaccount.
 There are so many things coming! Stay tuned!!
 
 
@@ -61,7 +61,7 @@ This project was created using the following technologies.
 - JWT (For authentication)
 - bcryptjs (for data encryption)
 - Nodemailer (for sending invoice via email)
-- html-pdf (for generating invoice PDFs)
+- puppeteer (for generating invoice PDFs)
 
 #### Database
 MongoDB (MongoDB Atlas)
@@ -83,7 +83,7 @@ REACT_APP_URL = http://localhost:3000
 
 ```
 
-To get your Google ClientID for authentication, go to the [credential Page ](https://console.cloud.google.com/apis/credentials) (if you are new, then [create a new project first](https://console.cloud.google.com/projectcreate) and follow the following steps;
+To get your Google ClientID for authentication, go to the [credential Page ](https://console.cloud.google.com/apis/credentials) if you are new, then [create a new project first](https://console.cloud.google.com/projectcreate) and follow the following steps;
 
 - Click Create credentials > OAuth client ID.
 - Select the Web application type.
@@ -123,9 +123,12 @@ If you're getting error while trying to send or download PDF,
 please run the following in your server terminal.
 
 ```
-$ npm install html-pdf -g
-$ npm link html-pdf
-$ npm link phantomjs-prebuilt
+npm i puppeteer
+# or using yarn
+yarn add puppeteer
+# or using pnpm
+pnpm i puppeteer
+
 ```
 
 ## Docker

@@ -1,32 +1,31 @@
-import React, {useState, useEffect} from 'react';
-import { useDispatch, useSelector } from 'react-redux'
-import { useHistory } from 'react-router-dom'
-import moment from 'moment'
-import PropTypes from 'prop-types';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
+import IconButton from '@material-ui/core/IconButton';
+import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableFooter from '@material-ui/core/TableFooter';
+import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
-import IconButton from '@material-ui/core/IconButton';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
+import BorderColorIcon from '@material-ui/icons/BorderColor';
+import DeleteOutlineRoundedIcon from '@material-ui/icons/DeleteOutlineRounded';
 import FirstPageIcon from '@material-ui/icons/FirstPage';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
-import Container from '@material-ui/core/Container'
-import DeleteOutlineRoundedIcon from '@material-ui/icons/DeleteOutlineRounded';
-import BorderColorIcon from '@material-ui/icons/BorderColor';
-import { useLocation } from 'react-router-dom';
+import moment from 'moment';
+import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory, useLocation } from 'react-router-dom';
 
+import { useSnackbar } from 'react-simple-snackbar';
 import { deleteInvoice, getInvoicesByUser } from '../../actions/invoiceActions';
+import Spinner from '../Spinner/Spinner';
 import NoData from '../svgIcons/NoData';
-import Spinner from '../Spinner/Spinner'
-import { useSnackbar } from 'react-simple-snackbar'
 
 const useStyles1 = makeStyles((theme) => ({
   root: {
@@ -175,9 +174,8 @@ const Invoices = () => {
     return status === "Partial" ? {border: 'solid 0px #1976d2', backgroundColor: '#baddff', padding: '8px 18px', borderRadius: '20px' }
         : status === "Paid" ? {border: 'solid 0px green', backgroundColor: '#a5ffcd', padding: '8px 18px', borderRadius: '20px' }
         : status === "Unpaid" ? {border: 'solid 0px red', backgroundColor: '#ffaa91', padding: '8px 18px', borderRadius: '20px' }
-        : "red";
-          
-}
+        : "red";        
+  }
 
   if(isLoading) {
     return  <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', paddingTop: '20px'}}>
@@ -222,7 +220,7 @@ const Invoices = () => {
                 <TableCell style={tableStyle} onClick={() => openInvoice(row._id)} >{row.currency} {row.total? toCommas(row.total): row.total} </TableCell>
                 <TableCell style={tableStyle} onClick={() => openInvoice(row._id)} > {moment(row.dueDate).fromNow()} </TableCell>
                 <TableCell style={tableStyle} onClick={() => openInvoice(row._id)} > <button style={checkStatus(row.status)}>{row.status}</button></TableCell>
-             
+
                 <TableCell style={{...tableStyle, width: '10px'}}>
                   <IconButton onClick={() => editInvoice(row._id)}>
                     <BorderColorIcon  style={{width: '20px', height: '20px'}} />

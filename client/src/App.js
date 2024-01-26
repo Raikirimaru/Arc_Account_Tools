@@ -1,22 +1,19 @@
-
-//Copyright (c) 2022 Panshak Solomon
-
-import React from 'react'
-import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom'
-import SnackbarProvider from 'react-simple-snackbar'
-import Home from './components/Home/Home';
-import Invoice from './components/Invoice/Invoice';
-import Invoices from './components/Invoices/Invoices';
-import InvoiceDetails from './components/InvoiceDetails/InvoiceDetails'
-import ClientList from './components/Clients/ClientList'
-import NavBar from './components/NavBar/NavBar';
-import Login from './components/Login/Login'
+import React from 'react';
+import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
+import SnackbarProvider from 'react-simple-snackbar';
+import ClientList from './components/Clients/ClientList';
 import Dashboard from './components/Dashboard/Dashboard';
 import Footer from './components/Footer/Footer';
 import Header from './components/Header/Header';
+import Home from './components/Home/Home';
+import Invoice from './components/Invoice/Invoice';
+import InvoiceDetails from './components/InvoiceDetails/InvoiceDetails';
+import Invoices from './components/Invoices/Invoices';
+import Login from './components/Login/Login';
+import NavBar from './components/NavBar/NavBar';
+import Forgot from './components/Password/Forgot';
+import Reset from './components/Password/Reset';
 import Settings from './components/Settings/Settings';
-import Forgot from './components/Password/Forgot'
-import Reset from './components/Password/Reset'
 
 function App() {
 
@@ -26,7 +23,7 @@ function App() {
     <div>
       <BrowserRouter>
       <SnackbarProvider>
-     {user && <NavBar />} 
+      {user && <NavBar />} 
       <Header />
         <Switch>
           <Route path="/" exact component={Home} />

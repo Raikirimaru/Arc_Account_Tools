@@ -4,12 +4,12 @@ ENV NODE_ENV production
 WORKDIR /app
 
 COPY client/package.json .
-COPY client/yarn.lock .
-RUN yarn install --production
+COPY client/pnpm-lock.yaml .
+RUN pnpm i --production
 
 COPY client .
 
-RUN npm run build
+RUN pnpm build
 
 
 FROM nginx:1.21.0-alpine as production

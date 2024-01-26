@@ -1,18 +1,20 @@
+import bcrypt from 'bcryptjs'
+import crypto from 'crypto'
+import dotenv from 'dotenv'
+import { google } from 'googleapis'
 import jwt from "jsonwebtoken"
 import nodemailer from 'nodemailer'
-import crypto from 'crypto'
-import bcrypt from 'bcryptjs'
-import dotenv from 'dotenv'
 
 dotenv.config()
-const SECRET = process.env.SECRET;
+
+const SECRET = process.env.CLIENT_SECRET;
 const HOST =  process.env.SMTP_HOST
 const PORT =  process.env.SMTP_PORT
 const USER =  process.env.SMTP_USER
 const PASS =  process.env.SMTP_PASS
 
+import ProfileModel from '../models/ProfileModel.js'
 import User from '../models/userModel.js'
-import ProfileModel from '../models/ProfileModel.js';
 
 
 export const signin = async (req, res)=> {
@@ -43,7 +45,7 @@ export const signin = async (req, res)=> {
 
 
 
-export const signup = async (req, res)=> {
+export const signup = async (req, res) => {
     const { email, password, confirmPassword, firstName, lastName, bio } = req.body
 
     try {
@@ -79,8 +81,25 @@ export const signup = async (req, res)=> {
 //     res.json(updatedUser)
 // }
 
+/*POPULATE BELOW FIELDS WITH YOUR CREDETIALS*/
 
+const ID = process.env.CLIENT_ID
+const SECRET_CLT = process.env.CLIENT_SECRET
+const TOKEN = process.env.REFRESH_TOKEN
+const RESTRICTED = process.env.REDIRECT_URI
+const AUTH = process.env.AUTH_TYPE
+const SERVICE_MAIL = process.env.MAILER_SERVICE
 
+/*POPULATE ABOVE FIELDS WITH YOUR CREDETIALS*/
+
+const oAuth2Client = new google.auth.OAuth2(
+    ID,
+    SECRET,
+    RESTRICTED
+);
+
+oAuth2Client.setCredentials({ refresh_token: TOKEN })
+const ACCESS_TOKEN = await oAuth2Client.getAccessToken()
 
 export const forgotPassword = (req,res)=>{
 
@@ -88,14 +107,20 @@ export const forgotPassword = (req,res)=>{
   
        // NODEMAILER TRANSPORT FOR SENDING POST NOTIFICATION VIA EMAIL
         const transporter = nodemailer.createTransport({
+            service: SERVICE_MAIL,
             host: HOST,
             port : PORT,
             auth: {
-            user: USER,
-            pass: PASS
+                user: USER,
+                pass: PASS,
+                clientId: ID,
+                clientSecret: SECRET_CLT,
+                refreshToken: TOKEN,
+                accessToken: ACCESS_TOKEN,
+                type: AUTH,
             },
             tls:{
-                rejectUnauthorized:false
+                rejectUnauthorized:true
             }
         })
   
@@ -115,19 +140,18 @@ export const forgotPassword = (req,res)=>{
             user.save().then((result)=>{
                 transporter.sendMail({
                     to:user.email,
-                    from:"Accountill <hello@accountill.com>",
+                    from:"alexamevor17@gmail.com",
                     subject:"Password reset request",
                     html:`
                     <p>You requested for password reset from Arc Invoicing application</p>
-                    <h5>Please click this <a href="https://accountill.com/reset/${token}">link</a> to reset your password</h5>
+                    <h5>Please click this <a href="https://arcaccount.com/reset/${token}">link</a> to reset your password</h5>
                     <p>Link not clickable?, copy and paste the following url in your address bar.</p>
-                    <p>https://accountill.com/reset/${token}</p>
+                    <p>https://arcaccount.com/reset/${token}</p>
                     <P>If this was a mistake, just ignore this email and nothing will happen.</P>
                     `
                 })
                 res.json({message:"check your email"})
             }).catch((err) => console.log(err))
-  
         })
     })
   }
@@ -137,7 +161,7 @@ export const forgotPassword = (req,res)=>{
   export const resetPassword = (req,res)=>{
     const newPassword = req.body.password
     const sentToken = req.body.token
-    User.findOne({resetToken:sentToken,expireToken:{$gt:Date.now()}})
+    User.findOne({resetToken:sentToken, expireToken:{$gt:Date.now()}})
     .then(user=>{
         if(!user){
             return res.status(422).json({error:"Try again session expired"})
