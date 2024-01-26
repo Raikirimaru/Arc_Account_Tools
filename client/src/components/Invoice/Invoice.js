@@ -63,7 +63,7 @@ const Invoice = () => {
 
     const location = useLocation()
     const [invoiceData, setInvoiceData] = useState(initialState)
-    const [ rates, setRates] = useState(0)
+    const [rates, setRates] = useState(0)
     const [vat, setVat] = useState(0)
     const [currency, setCurrency] = useState(currencies[0].value)
     const [subTotal, setSubTotal] = useState(0)
@@ -145,7 +145,7 @@ const Invoice = () => {
 
     const handleRates =(e) => {
         setRates(e.target.value)
-        setInvoiceData((prevState) => ({...prevState, tax: e.target.value}))
+        setInvoiceData((prevState) => ({...prevState, vat: e.target.value}))
     }
 
     // console.log(invoiceData)
@@ -177,7 +177,6 @@ const Invoice = () => {
 
     useEffect(() => {
         const total =() => {
-            
             //Tax rate is calculated as (input / 100 ) * subtotal + subtotal 
             const overallSum = rates /100 * subTotal + subTotal
             //VAT is calculated as tax rates /100 * subtotal

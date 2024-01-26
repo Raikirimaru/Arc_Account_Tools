@@ -164,7 +164,7 @@ const Modal = ({ setOpen, open, invoice }) => {
                 style={{padding: 10}} 
                 variant="outlined" 
                 onChange={(e) => setPayment({...payment, amountPaid: e.target.value})}
-                value={payment.amountPaid.toFixed(2)}
+                value={payment.amountPaid}
             />
 
             <Grid item fullWidth>
