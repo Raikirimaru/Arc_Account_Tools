@@ -144,10 +144,10 @@ const Invoice = () => {
     };
 
     const handleRates = (e) => {
-        console.log('Before Update - vat:', vat, 'tax:', invoiceData.tax);
+        console.log('Before Update - vat:', vat, 'tax:', invoiceData.vat);
         setRates(e.target.value);
-        setInvoiceData((prevState) => ({ ...prevState, tax: e.target.value }));
-        console.log('After Update - vat:', vat, 'tax:', invoiceData.tax);
+        setInvoiceData((prevState) => ({ ...prevState, vat: prevState.value }));
+        console.log('After Update - vat:', vat, 'tax:', invoiceData.vat);
     }
     
 
@@ -183,7 +183,7 @@ const Invoice = () => {
             //Tax rate is calculated as (input / 100 ) * subtotal + subtotal 
             const overallSum = rates /100 * subTotal + subTotal
             //VAT is calculated as tax rates /100 * subtotal
-            setVat(rates /100 * subTotal)
+            setVat(rates / 100 * subTotal)
             setTotal(overallSum)
 
 
@@ -235,8 +235,8 @@ const Invoice = () => {
             dueDate: selectedDate, 
             invoiceNumber: `${
                 invoiceData.invoiceNumber < 100 ? 
-                (Number(invoiceData.invoiceNumber)).toString().padStart(3, '0') 
-                : Number(invoiceData.invoiceNumber)
+                (Number(invoiceData.invoiceNumber).toFixed(2)).toString().padStart(3, '0') 
+                : Number(invoiceData.invoiceNumber).toFixed(2)
             }`,
             client, 
             type: type, 
@@ -286,7 +286,7 @@ const Invoice = () => {
                         }} 
                             contenteditable="true"
                             onInput={e => setInvoiceData({
-                            ...invoiceData, invoiceNumber: e.currentTarget.textContent})
+                                ...invoiceData, invoiceNumber: e.currentTarget.textContent})
                             }
                         >
                         <span style={{width:'40px',
@@ -455,7 +455,7 @@ const Invoice = () => {
                                     label="Select currency" 
                                     margin="normal" 
                                     />}
-                                value={currency.value}
+                                value={currency.valueOf}
                                 onChange={(event, value) => setCurrency(value.value)} 
                         />
                     </Grid>

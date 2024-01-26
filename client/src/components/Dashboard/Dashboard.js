@@ -114,7 +114,7 @@ const Dashboard = () => {
 
                         <li className={styles.listItem} >
                             <div>
-                                <p>{toCommas(totalAmount)}</p>
+                                <p>{toCommas(totalAmount.toFixed(2))}</p>
                                 <h2>Total Amount</h2>
                             </div>
                             <div>
@@ -186,7 +186,6 @@ const Dashboard = () => {
                 <h1 style={{textAlign: 'center', padding: '30px' }}>{paymentHistory.length ? 'Recent Payments' : 'No payment received yet'}</h1>
                     <div>
                     <div className={styles.table}>
-                       
                         <table>
                             <tbody>
                             {paymentHistory.length !== 0 && (
@@ -216,7 +215,6 @@ const Dashboard = () => {
                     </div>
                     </div>
                 </section>
-           
         </div>
     )
 }
