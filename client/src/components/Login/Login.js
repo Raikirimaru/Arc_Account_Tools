@@ -1,21 +1,21 @@
-import React, { useState } from 'react'
-import Field from './Field'
-import useStyles from './styles'
-import styles from './Login.module.css'
-import {GoogleLogin, GoogleOAuthProvider} from '@react-oauth/google'
-import jwtDecode from 'jwt-decode'
-import {useDispatch} from 'react-redux'
-import { useHistory, Link } from 'react-router-dom'
-import { signup, signin } from '../../actions/auth'
-import { Avatar, Button, Paper, Grid, Typography, Container } from '@material-ui/core'
+import { Avatar, Button, Container, Grid, Paper, Typography } from '@material-ui/core'
+import CircularProgress from '@material-ui/core/CircularProgress'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
-import { createProfile } from '../../actions/profile'
+import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google'
+import jwtDecode from 'jwt-decode'
+import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { Link, useHistory } from 'react-router-dom'
 import { useSnackbar } from 'react-simple-snackbar'
-import CircularProgress from '@material-ui/core/CircularProgress';
+import { signin, signup } from '../../actions/auth'
+import { createProfile } from '../../actions/profile'
+import Field from './Field'
+import styles from './Login.module.css'
+import useStyles from './styles'
 
 
 
-const initialState ={ firstName: '', lastName: '', email: '', password: '', confirmPassword: '', profilePicture: '', bio: ''}
+const initialState = { firstName: '', lastName: '', email: '', password: '', confirmPassword: '', profilePicture: '', bio: ''}
 
 const Login = () => {
 

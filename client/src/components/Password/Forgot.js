@@ -1,11 +1,11 @@
+import { Button, Container, Grid, Paper, Typography } from '@material-ui/core';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom'
-import { Button, Paper, Typography, Container, Grid } from '@material-ui/core';
-import useStyles from './styles';
-import Field from '../Login/Field';
+import { useHistory } from 'react-router-dom';
 import { forgot } from '../../actions/auth';
-import styles from './Password.module.css'
+import Field from '../Login/Field';
+import styles from './Password.module.css';
+import useStyles from './styles';
 
 
 const Forgot = () => {
@@ -14,7 +14,7 @@ const Forgot = () => {
   const [form, setForm] = useState("");
   const [step, setStep] = useState(0)
   const dispatch = useDispatch();
- const user = JSON.parse(localStorage.getItem('profile'))
+  const user = JSON.parse(localStorage.getItem('profile'))
 
   const handleSubmit = (e) => {
     e.preventDefault()
