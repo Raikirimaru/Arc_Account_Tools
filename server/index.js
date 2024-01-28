@@ -78,7 +78,7 @@ const transporter = nodemailer.createTransport({
 })
 
 // SEND PDF INVOICE VIA EMAIL
-app.post('/send-pdf', async (req, res) => {
+app.post('/send-pdf', cors(), async (req, res) => {
     const { email, company } = req.body;
 
     try {
@@ -136,7 +136,7 @@ app.post('/send-pdf', async (req, res) => {
 // npm install puppeteer
 
 //CREATE AND SEND PDF INVOICE
-app.post('/create-pdf', async (req, res) => {
+app.post('/create-pdf', cors(), async (req, res) => {
     try {
         const browser = await puppeteer.launch();
 
@@ -161,7 +161,7 @@ app.post('/create-pdf', async (req, res) => {
 });
 
 //SEND PDF INVOICE
-app.get('/fetch-pdf', (req, res) => {
+app.get('/fetch-pdf', cors() , (req, res) => {
     res.sendFile(`${__dirname}/invoice.pdf`)
 })
 
