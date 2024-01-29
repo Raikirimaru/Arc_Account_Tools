@@ -76,7 +76,7 @@ const transporter = nodemailer.createTransport({
 
 // SEND PDF INVOICE VIA EMAIL
 app.post('/send-pdf', async (req, res) => {
-    const { email, company } = req.body;
+    const { email, company, subTotal, total, vat, type, status, id} = req.body;
 
     try {
         // Launch Puppeteer browser
@@ -106,7 +106,30 @@ app.post('/send-pdf', async (req, res) => {
         const numberTwilio = process.env.TWILIO_NUMBER_TEST
         const client = twilio(accountSid, authToken)
         client.messages.create({
-            body: "Your invoice is ready. Check your email for the PDF attachment.",
+            body: `
+            ----- Invoice -----
+
+            Numéro de facture: ${id}
+            Status: ${status}
+            
+            Description des articles/services:
+                    
+            Sous-total: ${subTotal}
+            
+            Taxes (TVA 10%): ${vat}
+            
+            Montant total: ${total}
+            
+            Mode de paiement: ${type}
+            
+            Merci de votre confiance.
+            
+            Pour toute question ou préoccupation, n'hésitez pas à nous contacter.
+            
+            Cordialement,
+            ${email}
+            ${company.businessName ? company.businessName : company.name}
+            `,
             from: `whatsapp:${numberTwilio}`,
             to: "whatsapp:+22893621312",
         })
