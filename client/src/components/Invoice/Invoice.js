@@ -235,8 +235,8 @@ const Invoice = () => {
             dueDate: selectedDate, 
             invoiceNumber: `${
                 invoiceData.invoiceNumber < 100 ? 
-                (Number(invoiceData.invoiceNumber).toFixed(2)).toString().padStart(3, '0') 
-                : Number(invoiceData.invoiceNumber).toFixed(2)
+                (Number(invoiceData.invoiceNumber)).toString().padStart(3, '0') 
+                : Number(invoiceData.invoiceNumber)
             }`,
             client, 
             type: type, 

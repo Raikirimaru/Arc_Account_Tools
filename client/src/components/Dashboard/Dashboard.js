@@ -26,11 +26,10 @@ const Dashboard = () => {
     let paymentHistory = []
     for(let i = 0; i < invoices.length; i++) {
         let history = []
-        if(invoices[i].paymentRecords !== undefined) {
+        if (invoices[i]?.paymentRecords) {
             history = [...paymentHistory, invoices[i].paymentRecords]
             paymentHistory = [].concat.apply([], history);
-        }
-        
+        }        
     }
 
 

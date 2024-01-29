@@ -139,12 +139,11 @@ hr {
                   <h2>${company.businessName}</h2>
                   <p>${company.phoneNumber}</p>
                   <p>${company.website ? company?.website : ''}</p>
-                  
               </div>
         </div>
         
       <div class"footer">
-          <a href="https://arcaccount.com">
+          <a href="arcaccount.netlify.app">
           <img class="footer-logo" src="https://i.postimg.cc/hGZKzdkS/logo.png" alt="arc-invoice"/>
         </a>
       </div>

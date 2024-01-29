@@ -8,7 +8,7 @@ function Chart({ paymentHistory }) {
     for(let i = 0; i < paymentHistory.length; i++) {
       const newDate = new Date(paymentHistory[i].datePaid);
       let localDate = newDate.toLocaleDateString();
-            paymentDates = [...paymentDates, localDate]
+      paymentDates = [...paymentDates, localDate]
     }
 
 
@@ -41,11 +41,14 @@ function Chart({ paymentHistory }) {
     xaxis: {
       type: "datetime",
       categories: paymentDates,
+      labels: {
+        datetimeUTC: false,
+      }
     },
     tooltip: {
-      x: {
+     /*  x: {
         format: "dd/MM/yy",
-      },
+      }, */
     },
   };
 

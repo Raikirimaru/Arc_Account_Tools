@@ -126,7 +126,7 @@ img {
           <p style="font-size: 9px; line-height: 5px">${company.contactAddress}</p>
       </div>
 
-      <div style="margin-bottom: 100px; margin-top: 20px; margin-right: 500px;">
+      <div style="margin-bottom: 100px; margin-top: 20px; margin-right: 450px;">
       <p class="title">Bill to:</p>
         <h4 style="font-size: 9px; line-height: 5px">${name}</h4>
         <p style="font-size: 9px; line-height: 5px">${email}</p>
@@ -134,7 +134,7 @@ img {
         <p style="font-size: 9px; line-height: 5px">${address}</p>
       </div>
 
-    <div class="status" style="margin-top: -280px; margin-left: 200px">
+    <div class="status" style="margin-top: -280px; margin-left: 450px">
         <h1 style="font-size: 12px">${Number(balanceDue).toFixed(2) <= 0 ? 'Receipt' : type}</h1>
         <p style="font-size: 8px; margin-bottom: 10px">${id}</p>
         <p class="title" style="font-size: 8px">Status</p>

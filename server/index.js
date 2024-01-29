@@ -6,6 +6,7 @@ import mongoose from 'mongoose'
 import nodemailer from 'nodemailer'
 import { dirname } from 'path'
 import puppeteer from 'puppeteer'
+import twilio from 'twilio'
 import { fileURLToPath } from 'url'
 
 const __filename = fileURLToPath(import.meta.url)
@@ -25,11 +26,7 @@ dotenv.config()
 
 app.use((express.json({ limit: "30mb", extended: true})))
 app.use((express.urlencoded({ limit: "30mb", extended: true})))
-app.use((cors({
-    origin: ["*", "https://arcaccount.netlify.app"],
-    method: ["PUT", "HEAD", "POST", "GET", "DELETE"],
-    credentials: true,
-})))
+app.use((cors()))
 
 app.use('/invoices', invoiceRoutes)
 app.use('/clients', clientRoutes)
@@ -78,14 +75,13 @@ const transporter = nodemailer.createTransport({
 })
 
 // SEND PDF INVOICE VIA EMAIL
-app.post('/send-pdf', cors(), async (req, res) => {
+app.post('/send-pdf', async (req, res) => {
     const { email, company } = req.body;
 
     try {
         // Launch Puppeteer browser
-        const browser = await puppeteer.launch({
-            ignoreDefaultArgs: ['--disable-extensions'],
-        });
+        const browser = await puppeteer.launch({ headless: 'new', ignoreDefaultArgs: ['--disable-extensions']});
+
         const page = await browser.newPage();
 
         // Use req.body to generate the HTML content dynamically
@@ -103,6 +99,20 @@ app.post('/send-pdf', cors(), async (req, res) => {
 
         // Close the Puppeteer browser
         await browser.close();
+
+        // send invoice by whatsapp
+        const accountSid = process.env.TWILIO_ACCOUNT_SID;
+        const authToken = process.env.TWILIO_AUTH_TOKEN;
+        const numberTwilio = process.env.TWILIO_NUMBER_TEST
+        const client = twilio(accountSid, authToken)
+        client.messages.create({
+            body: "Your invoice is ready. Check your email for the PDF attachment.",
+            from: `whatsapp:${numberTwilio}`,
+            to: "whatsapp:+22893621312",
+        })
+        .then((message) => console.log(message.sid))
+        .catch(error => console.error(error));
+
         // Send email with defined transport object
         transporter.sendMail({
             from: `${company.email}`,
@@ -123,12 +133,12 @@ app.post('/send-pdf', cors(), async (req, res) => {
             }]
         });
 
-        console.log('PDF sent via email successfully');
-        res.send('PDF sent via email successfully');
+        console.log('PDF sent via email and whatsapp successfully');
+        res.send('PDF sent via email and whatsapp successfully');
     } catch (error) {
         // If there's an error during PDF generation, email sending, or Puppeteer operations
-        console.error('Error sending PDF via email:', error.message);
-        res.status(500).send('Error sending PDF via email');
+        console.error('Error sending PDF via email or whatsapp:', error.message);
+        res.status(500).send('Error sending PDF via email or whatsapp');
     }
 });
 
@@ -136,7 +146,7 @@ app.post('/send-pdf', cors(), async (req, res) => {
 // npm install puppeteer
 
 //CREATE AND SEND PDF INVOICE
-app.post('/create-pdf', cors(), async (req, res) => {
+app.post('/create-pdf', async (req, res) => {
     try {
         const browser = await puppeteer.launch();
 
@@ -161,7 +171,7 @@ app.post('/create-pdf', cors(), async (req, res) => {
 });
 
 //SEND PDF INVOICE
-app.get('/fetch-pdf', cors() , (req, res) => {
+app.get('/fetch-pdf', (req, res) => {
     res.sendFile(`${__dirname}/invoice.pdf`)
 })
 
